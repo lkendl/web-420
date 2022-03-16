@@ -1,2 +1,4 @@
-# web-420
-A repository for WEB420-346A RESTful APIs
+# WEB 420 RESTful APIs
+## Contributors
+* Professor Richard Krasso
+* Laura Kendl
