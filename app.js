@@ -6,7 +6,6 @@
 ; Date: 15 March 2022
 ; Modified By: Laura Kendl
 ; Description: Basic setup for WEB-420 projects.
-; Resources:
 ===========================================
 */
 
