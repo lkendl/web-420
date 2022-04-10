@@ -15,6 +15,7 @@ const http = require("http");
 const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
 const mongoose = require("mongoose");
+const composerAPI = require("./routes/kendl-composer-routes")
 
 // Create Express application.
 let app = express();
@@ -28,6 +29,24 @@ app.use(express.json());
 // App 'use' express.urlencoded({'extended':true});.
 app.use(express.urlencoded({'extended':true}));
 
+/**
+  ----- MONGODB ATLAS CONNECTION -----
+ */
+ const mongoDB = 'mongodb+srv://lkendl:admin@buwebdev-cluster-1.p8egd.mongodb.net/web420DB?retryWrites=true&w=majority';
+
+ mongoose.connect(mongoDB);
+
+// Add a Promise.
+mongoose.Promise = global.Promise;
+
+// Create database variable to hold connections.
+var db = mongoose.connection;
+
+// Add general error handling. Output results to console.
+db.on("error", console.error.bind(console, "MongoDB connection error"));
+db.once("open", function() {
+    console.log("Application connected to MongoDB instance");
+});
 /* 
   ----- OBJECT LITERALS -----
 */
@@ -50,7 +69,7 @@ const openapiSpecification = swaggerJsdoc(options);
 */
 // Wire openapiSpecification variable to app variable.
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
-
+app.use('/api', composerAPI);
 
 // Create and start the Node server.
 app.set("port", process.env.PORT || 3000);
