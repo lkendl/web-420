@@ -94,7 +94,6 @@ const saltRounds = 10;
 			}
 		});
 	} catch (e) {
-		console.log(e);
 		res.status(500).send("Server Exception")
 	}
 })
@@ -140,32 +139,30 @@ const saltRounds = 10;
 
 // login try...catch block.
 router.post("/login", async(req, res) => {
-    try {
-        // Query users collection with findOne() function and username from RequestBody.
-        User.findOne({ "userName": req.body.userName }, function(user, err) {
-            if (user) {
-                let passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-                    
-                    if (passwordIsValid) {
-                        if (valid) {
-                            res.status(200).send("User logged in")
-                        } else { 
-                            res.status(401).send("Invalid username and/or password")
-                        }
-                    }
-            } else {
-                if (err) {
-                    res.status(501).send("MongoDB Exception")
-                } else {
-                    if (!user) {
-                        res.status(401).send("Invalid username and/or password")
-                    }
-                }
-            }
-        });
-    } catch (e) {
-        res.status(500).send("Server Exception")
-    }
+	try {
+		// Query users collection with findOne() function and username from RequestBody.
+		User.findOne({"userName": req.body.userName}, function(err, user){
+			if (err) {
+				res.status(501).send("MongoDB Exception")
+			} else {
+				if (user) {
+					let passwordIsValid = bcrypt.compareSync(req.body.Password, user.Password);
+
+					if (passwordIsValid) {
+						res.status(200).send("User logged in")
+					} else {
+						res.status(401).send("Invalid username and/or password")
+					}
+				} else {
+					if (!user) {
+						res.status(401).send("Invalid username and/or password")
+					}
+				}
+			}	
+		});
+	} catch (e) {
+		res.status(500).send("Server Exception")
+	}
 })
 
 module.exports = router;
