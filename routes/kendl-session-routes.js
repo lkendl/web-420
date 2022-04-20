@@ -87,7 +87,7 @@ const saltRounds = 10;
 							})
 						} else {
 							res.status(200).send({
-								"message": "Registered User"
+								"message": "Registered user"
 							})
 							res.json(user);
 						}
