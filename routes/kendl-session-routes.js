@@ -75,26 +75,36 @@ const saltRounds = 10;
 		// Query users collection using findOne() and the username from RequestBody.
 		User.findOne({"userName": req.body.userName}, function(err, user){
 			if (err) {
-				res.status(501).send("MongoDB Exception")
+				res.status(501).send({
+					"message": `MongoDB Exception ${err}`
+				})
 			} else {
 				if (!user) {
 					User.create(newRegisteredUser, function (err, user) { // Saves record to MongoDB.
 						if (err) {
-							res.status(501).send("MongoDB Exception")
+							res.status(501).send({
+								"message": `MongoDB Exception ${err}`
+							})
 						} else {
-							res.status(200).send("Registered User")
+							res.status(200).send({
+								"message": "Registered User"
+							})
 							res.json(user);
 						}
 					})	
 				} else {
 					if (user) {
-						res.status(401).send("Username is already in use")
+						res.status(401).send({
+							"message": "Username is already in use"
+						})
 					}
 				}
 			}
 		});
 	} catch (e) {
-		res.status(500).send("Server Exception")
+		res.status(500).send({
+			"message": `Server Exception: ${e}`
+		})
 	}
 })
 
@@ -143,25 +153,35 @@ router.post("/login", async(req, res) => {
 		// Query users collection with findOne() function and username from RequestBody.
 		User.findOne({"userName": req.body.userName}, function(err, user){
 			if (err) {
-				res.status(501).send("MongoDB Exception")
+				res.status(501).send({
+					"message": `MongoDB Exception ${err}`
+				})
 			} else {
 				if (user) {
 					let passwordIsValid = bcrypt.compareSync(req.body.Password, user.Password);
 
 					if (passwordIsValid) {
-						res.status(200).send("User logged in")
+						res.status(200).send({
+							"message": "User logged in"
+						})
 					} else {
-						res.status(401).send("Invalid username and/or password")
+						res.status(401).send({
+							"message": "Invalid username and/or password"
+						})
 					}
 				} else {
 					if (!user) {
-						res.status(401).send("Invalid username and/or password")
+						res.status(401).send({
+							"message": "Invalid username and/or password"
+						})
 					}
 				}
 			}	
 		});
 	} catch (e) {
-		res.status(500).send("Server Exception")
+		res.status(500).send({
+			"message": `Server Exception: ${e}`
+		})
 	}
 })
 
