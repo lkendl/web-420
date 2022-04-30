@@ -18,6 +18,8 @@ const mongoose = require("mongoose");
 const composerAPI = require("./routes/kendl-composer-routes");
 const personAPI = require("./routes/kendl-person-routes");
 const userAPI = require("./routes/kendl-session-routes");
+const customerAPI = require("./routes/kendl-node-shopper-routes");
+
 
 // Create Express application.
 let app = express();
@@ -74,6 +76,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 app.use('/api', composerAPI);
 app.use('/api', personAPI);
 app.use('/api', userAPI);
+app.use('/api', customerAPI);
 
 // Create and start the Node server.
 app.set("port", process.env.PORT || 3000);
