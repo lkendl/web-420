@@ -3,7 +3,7 @@
 ; Title: Assignment 7.2 - NodeShopper API
 ; File Name: kendl-node-shopper-routes.js
 ; Author: Professor Krasso
-; Date: 27 April 2022
+; Date: 30 April 2022
 ; Modified By: Laura Kendl
 ; Description: Demonstrates how to build an API.
 ; Resources:
@@ -151,6 +151,7 @@ const Customer = require("../models/kendl-customer");
  *         description: MongoDB Exception
  */
 
+// createInvoiceByUserName try...catch block.
  router.post("/customers/:userName/invoices", async(req, res) => {
 	try {
 		Customer.findOne({ "userName": req.params.userName }, function(err, customer) {
@@ -213,6 +214,7 @@ const Customer = require("../models/kendl-customer");
  *         description: MongoDB Exception
  */
 
+// findAllInvoicesByUserName try...catch block.
 router.get("/customers/:userName/invoices", async(req, res) => {
 	try {	
 		// Query customers collection using the findOne() function and the username from RequestParams object.
