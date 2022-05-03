@@ -21,7 +21,7 @@ const Composer = require("../models/kendl-composer.js");
 // Operation findAllComposers OpenAPI specification:
 /**
  * findAllComposers
- * @swagger
+ * @openapi
  * /api/composers:
  *   get:
  *     tags:
@@ -42,20 +42,24 @@ router.get("/composers", (req, res) => {
     try {
         Composer.find({}, function (err, composers) { // Queries composers collection from Composer model.
             if (err) {
-                res.status(501).send("MongoDB Exception")
+                res.status(501).send({
+                    "message": `MongoDB Exception ${err}`
+                  })
             } else {
                 res.json(composers); // Returns composer documents.
             }
         })
     } catch (e) {
-        res.status(500).send("Server Exception")
+        res.status(500).send({
+            "message": `Server Exception: ${e}`
+          })
     }
 })
 
 // Operation createComposer OpenAPI specification:
 /**
  * createComposer
- * @swagger
+ * @openapi
  * /api/composers:
  *   post:
  *     tags:
@@ -100,21 +104,25 @@ router.post("/composers", async(req, res) => {
         // Call create() function on Composer model.
         Composer.create(composer, function (err, addComposer) {
             if (err) {
-                res.status(501).send("MongoDB Exception")
+                res.status(501).send({
+                    "message": `MongoDB Exception ${err}`
+                  })
             } else {
                 res.json(addComposer);
             }
         })
     } catch (e) {
         console.log(e);
-        res.status(500).send("Server Exception")
+        res.status(500).send({
+            "message": `Server Exception: ${e}`
+          })
     }
 })
 
 // Operation findComposerById OpenAPI specification:
 /**
  * findComposerById
- * @swagger
+ * @openapi
  * /api/composers/{id}:
  *   get:
  *     tags:
@@ -143,14 +151,148 @@ router.get("/composers/:id", async(req, res) => {
         // Query composers collection with findOne() function and RequestParams id on Composer model.
         Composer.findOne({ _id: req.params.id }, function(err, composer) { // [Ref C]
             if (err) {
-                res.status(501).send("MongoDB Exception")
+                res.status(501).send({
+                    "message": `MongoDB Exception ${err}`
+                  })
             } else {
                 res.json(composer);
             }
         });
     } catch (e) {
         console.log(e);
-        res.status(500).send("Server Exception")
+        res.status(500).send({
+            "message": `Server Exception: ${e}`
+          })
+    }
+});
+
+/**
+ * updateComposerById
+ * @openapi
+ * /api/composers/{id}:
+ *   put:
+ *     tags:
+ *       - Composers
+ *     name: updateComposerById
+ *     description: API to update an existing composer by ID.
+ *     summary: Updates a composer by ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The composer's ID
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *              type: object
+ *              description: Composer's information
+ *              required:
+ *                - firstName
+ *                - lastName
+ *              properties:
+ *                firstName:
+ *                  description: Composer's first name
+ *                  type: string
+ *                lastName:
+ *                  description: Composer's first name
+ *                  type: string
+ *     responses:
+ *       '200':
+ *         description: Array of composer documents
+ *       '401':
+ *         description: Invalid composerId
+ *       '500':
+ *         description: Server Exception
+ *       '501':
+ *         description: MongoDB Exception
+ */
+
+// updateComposerById try...catch block.
+router.put("/composers/:id", async(req, res) => {
+    try {
+        Composer.findOne({ "_id": req.params.id }, function(err, composer) {
+            if (composer) {
+                // Update returned composer object using set() function and mapping RequestBody fields to returned objects parameter.
+                composer.set({
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName
+                })
+                // Call the save() function on returned composer object and return the savedComposer object.
+                composer.save(function(err, savedComposer) {
+                    if (err) {
+                        console.log(err);
+                        res.json(savedComposer);
+                    } else {
+                        console.log(savedComposer);
+                        res.json(savedComposer);
+                    }
+                })
+            } else if (!composer) {
+                res.status(401).send({
+                    "message": `Invalid composerId ${err}`
+                    });
+            } else {
+                console.log(err);
+            }
+        })
+    } catch (e) {
+        console.log(e);
+        res.status(500).send({
+            "message": `Server Exception: ${e}`
+        })
+    }
+})
+
+/**
+ * deleteComposerById
+ * @openapi
+ * /api/composers/{id}:
+ *   delete:
+ *     tags:
+ *       - Composers
+ *     name: deleteComposerById
+ *     description: API to delete an existing composer by ID.
+ *     summary: Delete a composer by ID
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The composer's ID
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Composer document
+ *       '500':
+ *         description: Server Exception
+ *       '501':
+ *         description: MongoDB Exception
+ */
+
+// deleteComposerById try...catch block.
+router.delete("/composers/:id", async(req, res) => {
+    try {
+        Composer.findByIdAndDelete({ "_id": req.params.id }, function(err, composer) {
+            if (composer) {
+                // Returned deleted composer document.
+                res.json(composer);
+
+            } else {
+                console.log(err);
+                res.status(501).send({
+                    "message": `MongoDB Exception ${err}`
+                })
+            }
+        })
+    } catch (e) {
+        console.log(e);
+        res.status(500).send({
+            "message": `Server Exception: ${e}`
+        })
     }
 });
 
