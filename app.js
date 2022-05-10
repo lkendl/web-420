@@ -19,6 +19,7 @@ const composerAPI = require("./routes/kendl-composer-routes");
 const personAPI = require("./routes/kendl-person-routes");
 const userAPI = require("./routes/kendl-session-routes");
 const customerAPI = require("./routes/kendl-node-shopper-routes");
+const teamAPI = require("./routes/kendl-team-routes");
 
 
 // Create Express application.
@@ -77,6 +78,7 @@ app.use('/api', composerAPI);
 app.use('/api', personAPI);
 app.use('/api', userAPI);
 app.use('/api', customerAPI);
+app.use('/api', teamAPI);
 
 // Create and start the Node server.
 app.set("port", process.env.PORT || 3000);
