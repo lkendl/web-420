@@ -75,7 +75,16 @@ app.use('/api', teamAPI);
 
 // Create and start the Node server.
 app.set("port", process.env.PORT || 3000);
-http.createServer(app).listen(app.get("port"), function() {
-    console.log("Application started and listening on port " + app.get("port"))
+
+// For avoiding Heroku $PORT error
+app.get('/'), function (req, res) {
+  let result = "App is running"
+  res.send(result);
+}.listen(app.get("port"), function() {
+  console.log("Application started and listening on port " + app.get("port"))
 });
+
+// http.createServer(app).listen(app.get("port"), function() {
+//     console.log("Application started and listening on port " + app.get("port"))
+// });
 
