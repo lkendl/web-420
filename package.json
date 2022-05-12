@@ -2,7 +2,7 @@
     "name": "web-420",
     "author": "Laura Kendl",
     "private": true,
-    "main": "app.js",
+    "main": "web.js",
     "version": "1.0.0",
     "scripts": {
         "start": "node app.js"
