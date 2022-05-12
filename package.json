@@ -14,8 +14,7 @@
         "swagger-jsdoc": "^6.1.0",
         "swagger-ui-express": "^4.3.0"
     },
-    "engines": {
-        "node": "14.15.x",
-        "npm": "7.9.x"
+    "devDependencies": {
+        "nodemon": "^2.0.7"
     }
 }
